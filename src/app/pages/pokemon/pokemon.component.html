@@ -1,0 +1,39 @@
+<mat-drawer-container class="border-x min-h-full">
+  <mat-drawer mode="side" opened class="p-3">
+    <span class="block">Select Generation</span>
+    <div *ngFor="let generation of generations; let i = index" class="pt-3">
+      <button mat-button class="w-full" (click)="getPokemonByGeneration(i+1)">{{generation.name}}</button>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content class="p-3">
+    <h1 class="text-center">Generation {{generationNumber}}</h1>
+    <mat-paginator class="my-3"
+      [length]="pokemonList.length"
+      (page)="handlePageEvent($event)"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      [showFirstLastButtons]="true"
+      [pageSizeOptions]="pageSizeOptions"
+    >
+    </mat-paginator>
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      <div *ngFor="let pokemonDetails of pokemonDetailedList" >
+        <mat-card 
+          class="p-3 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer"
+          [routerLink]="['/pokemon', pokemonDetails.id]"
+        >
+          <h3 class="text-center border-4">{{pokemonDetails.name.charAt(0).toUpperCase() + pokemonDetails.name.slice(1)}}</h3>
+          <img src="{{pokemonDetails.sprites.front_default}}" class="border-4"/>
+          <div class="border-4 py-2 px-6">
+            <h3 class="text-center">Base Stats</h3>
+            <div *ngFor="let stat of pokemonDetails.stats" class="pt-1 border-b-2 flex justify-between">
+              <span class="text-sm">{{stat.stat.name}}: </span>
+              <span class="text-sm">{{stat.base_stat}}</span>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+
