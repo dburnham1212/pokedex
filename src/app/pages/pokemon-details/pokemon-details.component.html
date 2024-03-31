@@ -1,13 +1,14 @@
-<div class="bg-white background">
-  <div class="p-6 sm:w-11/12 md:w-5/6 lg:w-3/4 border-x-2 border-black bg-white mx-auto">
-    <ng-container *ngIf="pokemonInfo && speciesInfo">
-      <h1 class="text-center">{{pokemonInfo.name.charAt(0).toUpperCase() + pokemonInfo.name.slice(1)}}</h1>
-      <div class="flex flex-col md:flex-row justify-center align-center gap-3">
-        <img src="{{pokemonInfo.sprites.front_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
-        <img src="{{pokemonInfo.sprites.back_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
-        <div class="p-6 min-w-[250px] h-[250px] border-2 border-black rounded-md bg-gray-100">
+<div class="p-6 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 border-x-2 border-black bg-white mx-auto">
+  <ng-container *ngIf="pokemonInfo && speciesInfo && typeInfo">
+    <div class="text-center border-b-2 text-3xl pb-3 mb-3 lg:10/12 xl:w-3/4 mx-auto font-bold">{{pokemonInfo.name.charAt(0).toUpperCase() + pokemonInfo.name.slice(1)}}</div>
+    <div class="flex flex-col md:flex-row lg:10/12 xl:w-3/4 mx-auto gap-3">
+      <div class="basis-1/2 flex flex-col gap-3 justify-items-center">
+        <img src="{{pokemonInfo.sprites.other['official-artwork'].front_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
+      </div>
+      <div class="basis-1/2 flex flex-col justify-start gap-3">
+        <div class="p-6 min-w-[250px] min-h-[250px] border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Info</h3>
-          <p>{{speciesInfo.flavor_text_entries[0].flavor_text}}</p>
+          <p>{{flavourText}}</p>
           <div class="pt-1 border-b-2 flex justify-between">
             <span class="text-sm">Pokedex Number: </span>
             <span class="text-sm">{{pokemonInfo.order}}</span>
@@ -21,21 +22,64 @@
             <span class="text-sm">{{pokemonInfo.weight/10}} kg</span>
           </div>
         </div>
-      </div>
-      <div class="flex justify-center gap-3 pt-3">
-        <div class="p-6 min-w-[300px] h-[300px] border-4 border-black rounded-md bg-gray-100">
-          <h3 class="text-center">Base Stats</h3>
-          <div *ngFor="let stat of pokemonInfo.stats" class="pt-1 border-b-2 flex justify-between">
-            <span class="text-sm">{{stat.stat.name}}: </span>
-            <span class="text-sm">{{stat.base_stat}}</span>
+        <div class="p-6 min-w-[250px] min-h-[250px] border-2 border-black rounded-md bg-gray-100">
+            <h3 class="text-center">Base Stats</h3>
+            <div *ngFor="let stat of pokemonInfo.stats" class="pt-1 border-b-2 flex justify-between">
+              <span class="text-sm">{{stat.stat.name}}: </span>
+              <span class="text-sm">{{stat.base_stat}}</span>
+            </div>
+        </div>
+        <div class="p-3 min-w-[250px]  border-2 border-black rounded-md bg-gray-100">
+          <h3 class="text-center">Type(s)</h3>
+          <div class="flex flex-col gap-3 p-3">
+            <ng-container *ngFor="let pokemonType of typeInfo">
+              <div class="border-2 p-3">
+                <div class="flex justify-center pb-2 border-b-2" >
+                  <app-type-chip  type={{pokemonType.name}}></app-type-chip>
+                </div>
+                <div>
+                  <p class="pt-2">Double Damage To:</p>
+                  <div class="border-b-2 flex flex-wrap gap-2 pb-2">
+                    <ng-container *ngIf="pokemonType.damage_relations.double_damage_to.length > 0; else no_double_damage_to">
+                      <ng-container *ngFor="let type of pokemonType.damage_relations.double_damage_to">
+                        <app-type-chip type={{type.name}}></app-type-chip>
+                      </ng-container>
+                    </ng-container>
+                    <ng-template #no_double_damage_to>
+                      <div>None</div>
+                    </ng-template>
+                  </div>
+                </div>
+                <div>
+                  <p class="pt-2">Double Damage From:</p>
+                  <div class="flex flex-wrap gap-2 pb-2">
+                    <ng-container *ngIf="pokemonType.damage_relations.double_damage_from.length > 0; else no_double_damage_from">
+                      <ng-container *ngFor="let type of pokemonType.damage_relations.double_damage_from">
+                        <app-type-chip type={{type.name}}></app-type-chip>
+                      </ng-container>
+                    </ng-container>
+                    <ng-template #no_double_damage_from>
+                      <div>None</div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
-      <h3 class="pt-3 text-center">Shiny Images</h3>
-      <div class="flex gap-3 justify-center">
-        <img src="{{pokemonInfo.sprites.front_shiny}}" class="h-[300px] w-[300px] border-4 border-red-600 bg-white rounded-md"/>
-        <img src="{{pokemonInfo.sprites.back_shiny}}" class="h-[300px] w-[300px] border-4 border-red-600 bg-white rounded-md"/>
-      </div>
-    </ng-container>
-  </div>
+    </div>
+    
+    <h3 class="pt-3 text-center">Base Images</h3>
+    <div class="flex gap-3 justify-center">
+      <img src="{{pokemonInfo.sprites.front_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
+      <img src="{{pokemonInfo.sprites.back_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
+    </div>
+    <h3 class="pt-3 text-center">Shiny Images</h3>
+    <div class="flex gap-3 justify-center">
+      <img src="{{pokemonInfo.sprites.front_shiny}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
+      <img src="{{pokemonInfo.sprites.back_shiny}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
+    </div>
+  </ng-container>
 </div>
+

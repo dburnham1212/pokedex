@@ -23,7 +23,7 @@
           [routerLink]="['/pokemon', pokemonDetails.id]"
         >
           <h3 class="text-center border-4">{{pokemonDetails.name.charAt(0).toUpperCase() + pokemonDetails.name.slice(1)}} #{{pokemonDetails.id}}</h3>
-          <img src="{{pokemonDetails.sprites.front_default}}" class="border-4"/>
+          <img src="{{pokemonDetails.sprites.other['official-artwork'].front_default}}" class="border-4"/>
         </mat-card>
       </div>
     </div>
