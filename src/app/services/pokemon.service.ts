@@ -11,8 +11,16 @@ export class PokemonService {
 
   constructor(private http: HttpClient) { }
 
+  getDetailByUrl(url: string) {
+    return this.http.get(url);
+  }
+ 
+  getPokemonInfoById(id: number){
+    return this.http.get(`${BASE_URL}/pokemon/${id}`);
+  }
+
   getPokemonInfoByName(name: string) {
-    return this.http.get(`${BASE_URL}/pokemon/${name}`)
+    return this.http.get(`${BASE_URL}/pokemon/${name}`);
   }
 
   getPokemonByGeneration(generationNumber: number): Observable<any> {

@@ -4,4 +4,9 @@
 @tailwind utilities;
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+   margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+    background-image: url(./assets/images/pokeball_bg_25.png);
+    background-repeat: repeat;
+    background-size: 100px 100px;
+  }

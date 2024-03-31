@@ -68,6 +68,7 @@ export class PokemonComponent {
         return 0;
       })
       console.log(this.pokemonList)
+      this.generationNumber = newGenerationNumber;
       this.pokemonList = sortedPokemon;
       this.pageIndex = 0;
       this.pageOffset = 0;
