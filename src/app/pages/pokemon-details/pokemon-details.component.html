@@ -91,18 +91,23 @@
           <h3 class="text-center">Evolutions</h3>
           <ng-container *ngFor="let stage of evolutionStages; let stageIndex = index">
             <div>
-              <h4 class="pt-3 underline">Stage {{stageIndex + 1}}</h4>
-              <div class="flex flex-row flex-wrap gap-2 box-border justify-center border-2 p-2">
+              <div class="flex flex-row flex-wrap gap-2 box-border justify-center p-2">
                 <ng-container *ngFor="let evolution of stage">
                   <div class="basis-1/4" >
                     <img 
                       src="{{evolution.speciesInfo.sprites.other['official-artwork'].front_default}}"
                       [routerLink]="['/pokemon', evolution.speciesInfo.id]"
-                      class="rounded-full bg-gray-300"
+                      class="rounded-full bg-gray-300 cursor-pointer"
                     />
+                    
                   </div>
                 </ng-container>
               </div>
+              <ng-container *ngIf="evolutionStages[stageIndex + 1]">
+                <div class="flex justify-center">
+                  <i class="text-5xl text-gray-500 fa-solid fa-caret-down"></i>
+                </div>
+              </ng-container>
             </div>
           </ng-container>
         </div>
