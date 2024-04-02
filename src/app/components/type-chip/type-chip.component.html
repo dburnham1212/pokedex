@@ -1,18 +1,20 @@
 <ng-container [ngSwitch]="type">
-  <div class="bg-green-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'grass'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-purple-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'poison'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-red-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'fire'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-blue-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'water'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-gray-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'rock'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-amber-800 w-fit p-2 text-white rounded-md" *ngSwitchCase="'ground'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-blue-200 w-fit p-2 rounded-md" *ngSwitchCase="'flying'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-blue-100 w-fit p-2 rounded-md" *ngSwitchCase="'ice'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-pink-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'fairy'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-amber-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'bug'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-gray-700 w-fit p-2 text-white rounded-md" *ngSwitchCase="'steel'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-purple-700 w-fit p-2 text-white rounded-md" *ngSwitchCase="'psychic'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-purple-900 w-fit p-2 text-white rounded-md" *ngSwitchCase="'dark'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-gray-300 w-fit p-2 rounded-md" *ngSwitchCase="'normal'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-yellow-500 w-fit p-2 text-white rounded-md" *ngSwitchCase="'electric'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
-  <div class="bg-amber-900 w-fit p-2 text-white rounded-md" *ngSwitchCase="'fighting'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-green-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'grass'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-purple-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'poison'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-red-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'fire'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-blue-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'water'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-gray-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'rock'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-amber-800 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'ground'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-blue-200 w-fit px-2 py-1 rounded-full" *ngSwitchCase="'flying'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-blue-100 w-fit px-2 py-1 rounded-full" *ngSwitchCase="'ice'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-pink-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'fairy'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-amber-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'bug'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-gray-700 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'steel'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-purple-700 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'psychic'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-purple-900 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'dark'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-gray-300 w-fit px-2 py-1 rounded-full" *ngSwitchCase="'normal'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-yellow-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'electric'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-amber-900 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'fighting'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-orange-500 w-fit px-2 py-1 text-white rounded-full" *ngSwitchCase="'dragon'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
+  <div class="bg-purple-300 w-fit px-2 py-1 rounded-full" *ngSwitchCase="'ghost'">{{type.charAt(0).toUpperCase() + type.slice(1)}}</div>
 </ng-container>

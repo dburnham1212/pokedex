@@ -4,6 +4,18 @@
     <div class="flex flex-col md:flex-row lg:10/12 xl:w-3/4 mx-auto gap-3">
       <div class="basis-1/2 flex flex-col gap-3 justify-items-center">
         <img src="{{pokemonInfo.sprites.other['official-artwork'].front_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
+        <div class="border-2 p-3 rounded-md border-black bg-gray-100">
+          <h3 class="pt-3 text-center border-b-2 ">Base Images</h3>
+          <div class="flex gap-3 justify-center">
+            <img src="{{pokemonInfo.sprites.front_default}}" class="basis-1/2 bg-gray-300 rounded-md"/>
+            <img src="{{pokemonInfo.sprites.back_default}}" class="basis-1/2 w-fit bg-gray-300 rounded-md"/>
+          </div>
+          <h3 class="pt-3 text-center border-b-2">Shiny Images</h3>
+          <div class="flex gap-3 justify-center">
+            <img src="{{pokemonInfo.sprites.front_shiny}}" class="basis-1/2 bg-gray-300 rounded-md"/>
+            <img src="{{pokemonInfo.sprites.back_shiny}}" class="basis-1/2 bg-gray-300 rounded-md"/>
+          </div>
+        </div>
       </div>
       <div class="basis-1/2 flex flex-col justify-start gap-3">
         <div class="p-6 min-w-[250px] min-h-[250px] border-2 border-black rounded-md bg-gray-100">
@@ -24,10 +36,18 @@
         </div>
         <div class="p-6 min-w-[250px] min-h-[250px] border-2 border-black rounded-md bg-gray-100">
             <h3 class="text-center">Base Stats</h3>
-            <div *ngFor="let stat of pokemonInfo.stats" class="pt-1 border-b-2 flex justify-between">
-              <span class="text-sm">{{stat.stat.name}}: </span>
-              <span class="text-sm">{{stat.base_stat}}</span>
+            <div *ngFor="let stat of pokemonInfo.stats" class="pt-1">
+              <div class="flex justify-between">
+                <span class="text-sm">{{stat.stat.name.charAt(0).toUpperCase() + stat.stat.name.slice(1)}}: </span>
+                <span class="text-sm">{{stat.base_stat}}</span>
+              </div>
+              <mat-progress-bar
+                value="{{stat.base_stat/255 * 100}}"
+              >
+                
+              </mat-progress-bar>
             </div>
+            
         </div>
         <div class="p-3 min-w-[250px]  border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Type(s)</h3>
@@ -67,18 +87,26 @@
             </ng-container>
           </div>
         </div>
+        <div class="border-2 border-black bg-gray-100 p-6">
+          <h3 class="text-center">Evolutions</h3>
+          <ng-container *ngFor="let stage of evolutionStages; let stageIndex = index">
+            <div>
+              <h4 class="pt-3 underline">Stage {{stageIndex + 1}}</h4>
+              <div class="flex flex-row flex-wrap gap-2 box-border justify-center border-2 p-2">
+                <ng-container *ngFor="let evolution of stage">
+                  <div class="basis-1/4" >
+                    <img 
+                      src="{{evolution.speciesInfo.sprites.other['official-artwork'].front_default}}"
+                      [routerLink]="['/pokemon', evolution.speciesInfo.id]"
+                      class="rounded-full bg-gray-300"
+                    />
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
       </div>
-    </div>
-    
-    <h3 class="pt-3 text-center">Base Images</h3>
-    <div class="flex gap-3 justify-center">
-      <img src="{{pokemonInfo.sprites.front_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
-      <img src="{{pokemonInfo.sprites.back_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
-    </div>
-    <h3 class="pt-3 text-center">Shiny Images</h3>
-    <div class="flex gap-3 justify-center">
-      <img src="{{pokemonInfo.sprites.front_shiny}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
-      <img src="{{pokemonInfo.sprites.back_shiny}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
     </div>
   </ng-container>
 </div>

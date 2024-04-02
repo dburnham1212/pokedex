@@ -1,0 +1,11 @@
+<div class="bg-white w-3/4 h-full mx-auto border-black border-x-2">
+  <h1 class="text-center pt-3">Berries</h1>
+  <ul class="w-3/4 mx-auto">
+    <ng-container *ngFor="let berry of berriesInfoList">
+      <li class="flex bg-gray-100 border-2 pt-2">
+        <img src="{{berry.sprites.default}}">
+        <div>{{berry.name}}</div>
+      </li>
+    </ng-container>
+  </ul>
+</div>

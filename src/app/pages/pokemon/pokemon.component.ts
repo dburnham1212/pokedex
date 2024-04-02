@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Observable, concat, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
@@ -30,6 +31,8 @@ export class PokemonComponent {
   pageOffset = 0;
   pageIndex = 0;
   pageSizeOptions = [5, 10, 20];
+
+  pokemonInfoSubscriptions: Array<Observable<Object>> = [];
 
   constructor(private pokemonService: PokemonService) {}
 
@@ -73,24 +76,22 @@ export class PokemonComponent {
       this.pageIndex = 0;
       this.pageOffset = 0;
       this.getPokemonInformation();
-      
     });
   }
 
-  async getPokemonInformation (): Promise<void> {
+  async getPokemonInformation (): Promise<any> {
     this.pokemonDetailedList = [];
     for(let i = this.pageOffset; i < this.pageOffset + this.pageSize; i++) {
-      await this.pokemonService.getPokemonInfoByName(this.pokemonList[i]['name']).subscribe(async (result) => {
-        await this.pokemonDetailedList.push(result);
-      })
+      await firstValueFrom(this.pokemonService.getPokemonInfoByName(this.pokemonList[i]['name']))
+      .then((result) =>
+        this.pokemonDetailedList.push(result)
+      );
     }
-    console.log("pokemon details", this.pokemonDetailedList);
   }
 
   getPokemonGenerations(): void {
     this.pokemonService.getPokemonGenerations().subscribe((result) => {
       this.generations=result.results;
-      
     })
   }
 }

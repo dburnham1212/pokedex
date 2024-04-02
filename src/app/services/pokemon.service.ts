@@ -30,4 +30,8 @@ export class PokemonService {
   getPokemonGenerations(): Observable<any> {
     return this.http.get(`${BASE_URL}/generation`);
   }
+
+  getBerries(): Observable<any> {
+    return this.http.get(`${BASE_URL}/berry`)
+  }
 }

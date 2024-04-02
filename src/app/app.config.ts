@@ -7,7 +7,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withComponentInputBinding()), 
+    provideRouter(routes), 
     provideAnimationsAsync(),
     provideHttpClient()
   ]
