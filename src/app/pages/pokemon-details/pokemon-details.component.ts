@@ -30,6 +30,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   flavourText: string | undefined;
   evolutionStages: Array<any> = [];
   pokemonId!: string;
+  learnedMoves!: Array<any>;
 
   constructor(private pokemonService: PokemonService, private router: ActivatedRoute ) {
     router.params.subscribe((routeParams) => {
@@ -59,6 +60,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
       this.pokemonInfo = result;
       console.log(result);
       this.getSpeciesInfo(this.pokemonInfo.species.url);
+      this.getLearnedMoves();
       this.pokemonInfo.types.forEach((type: any) => {
         this.getTypeInfo(type.type.url)
       })
@@ -122,5 +124,35 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
       } while (!!evoData && evoData.hasOwnProperty('evolves_to'));
       console.log(this.evolutionStages)
     })
+  }
+
+  getLearnedMoves() {
+    this.learnedMoves = this.pokemonInfo.moves.map((move: any) => {
+      return {
+        moveName: move.move.name,
+        learnedMoveInfo: move.version_group_details.find((version_group_detail: any) => {
+          return version_group_detail.move_learn_method.name === 'level-up'
+        })
+      }
+    }).filter((move: any) => {return move.learnedMoveInfo });
+
+    for(let move of this.learnedMoves) {
+      let newMoveName = move.moveName.split("-");
+      for(let i = 0; i < newMoveName.length; i++) {
+        newMoveName[i] = newMoveName[i].charAt(0).toUpperCase() + newMoveName[i].slice(1);
+      }
+      move.moveName = newMoveName.join(" ")
+    }
+
+    this.learnedMoves.sort((a: any, b: any) => {
+      if(a.learnedMoveInfo.level_learned_at > b.learnedMoveInfo.level_learned_at) {
+        return 1;
+      }
+      if(a.learnedMoveInfo.level_learned_at < b.learnedMoveInfo.level_learned_at) {
+        return -1;
+      }
+      return 0;
+    })
+    console.log("moves",this.learnedMoves)
   }
 }
