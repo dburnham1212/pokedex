@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, concat, firstValueFrom } from 'rxjs';
+import { Observable, combineLatest, concat, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
@@ -50,7 +50,7 @@ export class PokemonComponent {
 
   getPokemonByGeneration(newGenerationNumber: number): void {
     this.pokemonService.getPokemonByGeneration(newGenerationNumber).subscribe((result) => {
-      console.log(result);
+      console.log("pokemonGenResult", result);
       // Create a number to sort the pokemon by
       let listWithNumber = result.pokemon_species.map((item: any) => {
         const pokemonUrlArr = item.url.split("/");
@@ -70,25 +70,38 @@ export class PokemonComponent {
         }
         return 0;
       })
-      console.log(this.pokemonList)
       this.generationNumber = newGenerationNumber;
       this.pokemonList = sortedPokemon;
+      console.log("sortedPokemon", this.pokemonList);
       this.pageIndex = 0;
       this.pageOffset = 0;
       this.getPokemonInformation();
     });
   }
 
-  async getPokemonInformation (): Promise<any> {
-    this.pokemonDetailedList = [];
-    for(let i = this.pageOffset; i < this.pageOffset + this.pageSize; i++) {
-      await firstValueFrom(this.pokemonService.getPokemonInfoByName(this.pokemonList[i]['name']))
-      .then((result) =>
-        this.pokemonDetailedList.push(result)
-      );
-    }
-  }
+  ignoreData = false;
 
+  async getPokemonInformation (): Promise<any> {
+    let maximumValue = 0;
+    if(this.pageOffset + this.pageSize > this.pokemonList.length) {
+      maximumValue = this.pokemonList.length;
+    } else {
+      maximumValue = this.pageOffset + this.pageSize;
+    } 
+    
+    console.log(this.pokemonDetailedList)
+    const observableList: Array<Observable<any>> = [];
+    for(let i = this.pageOffset; i < maximumValue; i++) {
+      observableList.push(this.pokemonService.getPokemonInfoByName(this.pokemonList[i]['name']));
+    }
+    console.log(this.pokemonDetailedList);
+    let newPokemonDetailList: any = []
+    concat(...observableList).
+    subscribe((result) => {
+      newPokemonDetailList.push(result)
+    })
+    this.pokemonDetailedList = newPokemonDetailList;
+  }
   getPokemonGenerations(): void {
     this.pokemonService.getPokemonGenerations().subscribe((result) => {
       this.generations=result.results;
