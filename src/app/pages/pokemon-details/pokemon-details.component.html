@@ -7,20 +7,34 @@
         <div class="border-2 p-3 rounded-md border-black bg-gray-100">
           <h3 class="pt-3 text-center border-b-2 ">Base Images</h3>
           <div class="flex gap-3 justify-center">
-            <img *ngIf="pokemonInfo.sprites.front_default" src="{{pokemonInfo.sprites.front_default}}" class="basis-1/2 bg-gray-300 rounded-md"/>
-            <img *ngIf="pokemonInfo.sprites.back_default" src="{{pokemonInfo.sprites.back_default}}" class="basis-1/2 w-fit bg-gray-300 rounded-md"/>
+            <img *ngIf="pokemonInfo.sprites.front_default" src="{{pokemonInfo.sprites.front_default}}" class="basis-1/2 bg-gray-300 rounded-md pixelated-image"/>
+            <img *ngIf="pokemonInfo.sprites.back_default" src="{{pokemonInfo.sprites.back_default}}" class="basis-1/2 w-fit bg-gray-300 rounded-md pixelated-image"/>
           </div>
           <h3 class="pt-3 text-center border-b-2">Shiny Images</h3>
           <div class="flex gap-3 justify-center">
-            <img *ngIf="pokemonInfo.sprites.front_shiny" src="{{pokemonInfo.sprites.front_shiny}}" class="basis-1/2 bg-gray-300 rounded-md"/>
-            <img *ngIf="pokemonInfo.sprites.back_shiny" src="{{pokemonInfo.sprites.back_shiny}}" class="basis-1/2 bg-gray-300 rounded-md"/>
+            <img *ngIf="pokemonInfo.sprites.front_shiny" src="{{pokemonInfo.sprites.front_shiny}}" class="basis-1/2 bg-gray-300 rounded-md pixelated-image"/>
+            <img *ngIf="pokemonInfo.sprites.back_shiny" src="{{pokemonInfo.sprites.back_shiny}}" class="basis-1/2 bg-gray-300 rounded-md pixelated-image"/>
           </div>
         </div>
         <div class="border-2 p-3 rounded-md border-black bg-gray-100">
           <h3 class="pt-3 text-center border-b-2 ">Other Images</h3>
-          <div class="flex flex-wrap gap-3 justify-center">
-            <img *ngIf="pokemonInfo.sprites.other.home.front_default"src="{{pokemonInfo.sprites.other.home.front_default}}" class="basis-1/2 bg-gray-300 rounded-md"/>
-            <img *ngIf="pokemonInfo.sprites.other.home.front_shiny" src="{{pokemonInfo.sprites.other.home.front_shiny}}" class="basis-1/2 w-fit bg-gray-300 rounded-md"/>
+          <div class="flex flex-row flex-wrap">
+            <div class="basis-1/2 p-1">
+              <img *ngIf="pokemonInfo.sprites.other.home.front_default" src="{{pokemonInfo.sprites.other.home.front_default}}" class="bg-gray-300 rounded-md"/>
+            </div>
+            <div class="basis-1/2 p-1">
+              <img *ngIf="pokemonInfo.sprites.other.home.front_shiny" src="{{pokemonInfo.sprites.other.home.front_shiny}}" class=" bg-gray-300 rounded-md"/>
+            </div>
+            <div class="basis-1/2 p-1">
+              <div class="bg-gray-300 rounded-md p-6">
+                <img *ngIf="pokemonInfo.sprites.other.home.front_default" src="{{pokemonInfo.sprites.other.showdown.front_default}}" class="w-full h-full pixelated-image"/>
+              </div>
+            </div>
+            <div class="basis-1/2 p-1">
+              <div class="bg-gray-300 rounded-md p-6">
+                <img *ngIf="pokemonInfo.sprites.other.home.front_shiny" src="{{pokemonInfo.sprites.other.showdown.front_shiny}}" class="w-full h-full pixelated-image"/>
+              </div>
+            </div>
           </div>
         </div>
       </div>
