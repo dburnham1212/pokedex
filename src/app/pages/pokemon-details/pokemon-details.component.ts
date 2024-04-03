@@ -29,14 +29,15 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   typeInfo:any = [];
   flavourText: string | undefined;
   evolutionStages: Array<any> = [];
+  pokemonId!: string;
 
   constructor(private pokemonService: PokemonService, private router: ActivatedRoute ) {
     router.params.subscribe((routeParams) => {
       //console.log(val)
-      let pokemonId = routeParams['id'];
+      this.pokemonId = routeParams['id'];
       this.evolutionStages=[];
       this.typeInfo=[];
-      this.getPokemonDetailsById(parseInt(pokemonId));
+      this.getPokemonDetailsById(parseInt(this.pokemonId));
       window.scroll({ 
         top: 0, 
         left: 0, 
