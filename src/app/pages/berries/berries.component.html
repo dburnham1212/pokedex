@@ -1,11 +1,16 @@
-<div class="bg-white w-3/4 h-full mx-auto border-black border-x-2">
-  <h1 class="text-center pt-3">Berries</h1>
-  <ul class="w-3/4 mx-auto">
+<div class="bg-white w-3/4 mx-auto border-black border-x-2 p-6 bg-neutral-50">
+  <div class="text-xl text-center border-b-2 w-3/4 mx-auto mb-3">Berries</div>
+  <div class="w-3/4 mx-auto grid grid-cols-4 gap-3 ">
     <ng-container *ngFor="let berry of berriesInfoList">
-      <li class="flex bg-gray-100 border-2 pt-2">
-        <img src="{{berry.sprites.default}}">
-        <div>{{berry.name}}</div>
-      </li>
+      <mat-card class="border-2 pt-2 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer">
+        <div class="text-center">{{berry.name}}</div>
+        <div class="border-2 m-3">
+          <img 
+            src="{{berry.sprites.default}}" 
+            class="w-full pixelated-image"
+          >
+        </div>
+      </mat-card>
     </ng-container>
-  </ul>
+  </div>
 </div>

@@ -34,4 +34,8 @@ export class PokemonService {
   getBerries(): Observable<any> {
     return this.http.get(`${BASE_URL}/berry`)
   }
+
+  getItemCategories(): Observable<any> {
+    return this.http.get(`${BASE_URL}/item-category?limit=54`)
+  }
 }
