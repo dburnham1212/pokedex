@@ -42,4 +42,8 @@ export class PokemonService {
   getItemsByCategory(id: string): Observable<any> {
     return this.http.get(`${BASE_URL}/item-category/${id}`)
   }
+
+  getItemDetails(id:string): Observable<any> {
+    return this.http.get(`${BASE_URL}/item/${id}`)
+  }
 }
