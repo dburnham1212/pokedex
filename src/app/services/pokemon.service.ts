@@ -38,4 +38,8 @@ export class PokemonService {
   getItemCategories(): Observable<any> {
     return this.http.get(`${BASE_URL}/item-category?limit=54`)
   }
+
+  getItemsByCategory(id: string): Observable<any> {
+    return this.http.get(`${BASE_URL}/item-category/${id}`)
+  }
 }

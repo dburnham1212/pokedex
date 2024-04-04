@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-berries',
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule
   ],
   templateUrl: './berries.component.html',
@@ -27,7 +29,7 @@ export class BerriesComponent implements OnInit{
     this.pokemonService.getBerries().subscribe((result) => {
       console.log("berry info", result);
       this.berriesList = result.results;
-      this.getBerryInfo()
+      this.getBerryInfo();
     })
   }
 
