@@ -16,12 +16,12 @@ export class ItemDetailsComponent implements OnInit{
   itemId!: string;
   itemInfo: any;
   flavourText!: string;
+  itemAttributes!: any;
 
   ngOnInit(): void {
     this.router.params.subscribe((routeParams) => {
       this.itemId = routeParams['itemId'];
       this.getItemDetails(this.itemId);
-      
     });
   }
 
@@ -30,6 +30,7 @@ export class ItemDetailsComponent implements OnInit{
       console.log(result);
       this.itemInfo = result;
       this.getFlavourText();
+      this.getItemAttributes();
     })
   }
 
@@ -39,5 +40,21 @@ export class ItemDetailsComponent implements OnInit{
     }).text.split('\f').join(" ");
     
     this.flavourText = newFlavourText;
+  }
+
+  getItemAttributes() : void {
+    let newItemAttributes: any = [];
+    for(let attribute of this.itemInfo.attributes) {
+      this.pokemonService.getDetailByUrl(attribute.url).subscribe((result: any) => {
+        newItemAttributes.push({
+          name: result.name,
+          description: result.descriptions.find((description: any) => {
+            return description.language.name === 'en'
+          }).description
+        });
+      })
+    } 
+    this.itemAttributes = newItemAttributes;
+    console.log(this.itemAttributes)
   }
 }

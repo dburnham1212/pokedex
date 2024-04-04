@@ -28,9 +28,25 @@
         </div>
         <div class="p-6 min-w-[250px] border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Effects</h3>
-          <ng-container *ngFor="let effect of itemInfo.effect_entries">
-            <p>{{effect.effect}}</p>
+          <ng-container *ngIf="itemInfo.effect_entries.length > 0; else no_effect_entries">
+            <ng-container *ngFor="let effect of itemInfo.effect_entries">
+              <p>{{effect.effect}}</p>
+            </ng-container>
           </ng-container>
+          <ng-template #no_effect_entries>
+            <p>None</p>
+          </ng-template>
+        </div>
+        <div class="p-6 min-w-[250px] border-2 border-black rounded-md bg-gray-100">
+          <h3 class="text-center">Attributes</h3>
+          <ng-container *ngIf="itemAttributes.length > 0; else no_attributes_entries">
+            <ng-container *ngFor="let attribute of itemAttributes">
+              <p>{{attribute.name}}: {{attribute.description}}</p>
+            </ng-container>
+          </ng-container>
+          <ng-template #no_attributes_entries>
+            <p>None</p>
+          </ng-template>
         </div>
       </div>
       
