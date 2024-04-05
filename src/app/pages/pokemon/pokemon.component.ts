@@ -4,9 +4,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, combineLatest, concat, firstValueFrom } from 'rxjs';
+import { Observable, concat } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
@@ -17,7 +18,8 @@ import { Observable, combineLatest, concat, firstValueFrom } from 'rxjs';
     MatSidenavModule,
     MatButtonModule,
     MatCardModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule
   ],
   templateUrl: './pokemon.component.html',
   styleUrl: './pokemon.component.css'
@@ -26,11 +28,16 @@ export class PokemonComponent {
   generationNumber = 1;
   generations: any | undefined;
   pokemonList = [];
+  currentPokemonList = [];
   pokemonDetailedList: Array<any> = [];
   pageSize = 20;
   pageOffset = 0;
   pageIndex = 0;
   pageSizeOptions = [5, 10, 20];
+  pokemonTypes: any;
+  currentType = 'none';
+  pokemonTypeInfo: Array<any> = [];
+  pokemonByTypeSelection: Array<string> = [];
 
   pokemonInfoSubscriptions: Array<Observable<Object>> = [];
 
@@ -38,14 +45,16 @@ export class PokemonComponent {
 
   ngOnInit(): void {
     this.getPokemonGenerations();
-    this.getPokemonByGeneration(this.generationNumber);
+    this.getPokemonByGeneration(this.generationNumber);    
+    this.getPokemonTypes();
   }
 
-  handlePageEvent(e: PageEvent) {
+  handlePageEvent(e: PageEvent): void {
     this.pageSize = e.pageSize
     this.pageIndex = e.pageIndex
     this.pageOffset = e.pageIndex * e.pageSize
     this.getPokemonInformation();
+
   }
 
   getPokemonByGeneration(newGenerationNumber: number): void {
@@ -72,6 +81,7 @@ export class PokemonComponent {
       })
       this.generationNumber = newGenerationNumber;
       this.pokemonList = sortedPokemon;
+      this.currentPokemonList = sortedPokemon;
       console.log("sortedPokemon", this.pokemonList);
       this.pageIndex = 0;
       this.pageOffset = 0;
@@ -79,22 +89,28 @@ export class PokemonComponent {
     });
   }
 
-  ignoreData = false;
-
-  async getPokemonInformation (): Promise<any> {
+  getPokemonInformation (): void {
+    // Filter the pokemon based off of the type selection
+    if(this.currentType !== "none"){
+      this.currentPokemonList = this.pokemonList.filter((pokemon: any) => {
+        return this.pokemonByTypeSelection.includes(pokemon.name);
+      })
+    } else {
+      this.currentPokemonList = this.pokemonList;
+    }
+    console.log("pokemonList", this.pokemonList)
     let maximumValue = 0;
-    if(this.pageOffset + this.pageSize > this.pokemonList.length) {
-      maximumValue = this.pokemonList.length;
+    if(this.pageOffset + this.pageSize > this.currentPokemonList.length) {
+      maximumValue = this.currentPokemonList.length;
     } else {
       maximumValue = this.pageOffset + this.pageSize;
     } 
     
-    console.log(this.pokemonDetailedList)
     const observableList: Array<Observable<any>> = [];
     for(let i = this.pageOffset; i < maximumValue; i++) {
-      observableList.push(this.pokemonService.getPokemonInfoByName(this.pokemonList[i]['name']));
+      
+      observableList.push(this.pokemonService.getPokemonInfoByName(this.currentPokemonList[i]['name']));
     }
-    console.log(this.pokemonDetailedList);
     let newPokemonDetailList: any = []
     concat(...observableList).
     subscribe((result) => {
@@ -102,9 +118,36 @@ export class PokemonComponent {
     })
     this.pokemonDetailedList = newPokemonDetailList;
   }
+
   getPokemonGenerations(): void {
     this.pokemonService.getPokemonGenerations().subscribe((result) => {
       this.generations=result.results;
     })
+  }
+
+  getPokemonTypes(): void {
+    this.pokemonService.getPokemonTypes().subscribe((result) => {
+      this.pokemonTypes=result.results;
+      console.log(this.pokemonTypes)
+    })
+  }
+
+  getPokemonByType(type: string): void {
+    this.pokemonService.getTypeInfo(type).subscribe((result) => {
+      this.pokemonByTypeSelection = result.pokemon.map((pokemon: any) => {
+        return pokemon.pokemon.name;
+      })
+      console.log(this.pokemonByTypeSelection);
+      this.getPokemonInformation();
+    });
+  }
+
+  onTypeChange(e: MatSelectChange): void {
+    this.currentType = e.value;
+    if(e.value !== "none") {
+      this.getPokemonByType(e.value);
+    } else {
+      this.getPokemonInformation();
+    }
   }
 }

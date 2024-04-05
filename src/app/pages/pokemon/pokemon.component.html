@@ -7,8 +7,18 @@
   </mat-drawer>
   <mat-drawer-content class="p-3">
     <h1 class="text-center">Generation {{generationNumber}}</h1>
-    <mat-paginator class="my-3"
-      [length]="pokemonList.length"
+    <mat-form-field>
+        <mat-label>Types</mat-label>
+        <mat-select (selectionChange)="onTypeChange($event)">
+          <mat-option value="none">None</mat-option>
+          @for (type of pokemonTypes; track type) {
+            <mat-option value="{{type.name}}">{{type.name.charAt(0).toUpperCase() + type.name.slice(1)}}</mat-option>
+          }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-paginator class="mb-3"
+      [length]="currentPokemonList.length"
       (page)="handlePageEvent($event)"
       [pageSize]="pageSize"
       [pageIndex]="pageIndex"

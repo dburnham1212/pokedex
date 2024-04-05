@@ -31,8 +31,12 @@ export class PokemonService {
     return this.http.get(`${BASE_URL}/generation`);
   }
 
-  getBerries(): Observable<any> {
-    return this.http.get(`${BASE_URL}/berry`)
+  getPokemonTypes(): Observable<any> {
+    return this.http.get(`${BASE_URL}/type`)
+  }
+
+  getTypeInfo(type: string): Observable<any> {
+    return this.http.get(`${BASE_URL}/type/${type}`)
   }
 
   getItemCategories(): Observable<any> {
@@ -45,5 +49,10 @@ export class PokemonService {
 
   getItemDetails(id:string): Observable<any> {
     return this.http.get(`${BASE_URL}/item/${id}`)
+  } 
+  
+  getBerries(): Observable<any> {
+    return this.http.get(`${BASE_URL}/berry`)
   }
+
 }
