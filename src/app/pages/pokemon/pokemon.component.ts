@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, concat } from 'rxjs';
@@ -19,7 +21,9 @@ import { Observable, concat } from 'rxjs';
     MatButtonModule,
     MatCardModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './pokemon.component.html',
   styleUrl: './pokemon.component.css'
@@ -38,6 +42,7 @@ export class PokemonComponent {
   currentType = 'none';
   pokemonTypeInfo: Array<any> = [];
   pokemonByTypeSelection: Array<string> = [];
+  pokemonNameSearch: string = "";
 
   pokemonInfoSubscriptions: Array<Observable<Object>> = [];
 
@@ -82,7 +87,7 @@ export class PokemonComponent {
       this.generationNumber = newGenerationNumber;
       this.pokemonList = sortedPokemon;
       this.currentPokemonList = sortedPokemon;
-      console.log("sortedPokemon", this.pokemonList);
+      console.log("sortedPokemon", this.currentPokemonList);
       this.pageIndex = 0;
       this.pageOffset = 0;
       this.getPokemonInformation();
@@ -90,13 +95,21 @@ export class PokemonComponent {
   }
 
   getPokemonInformation (): void {
+    
+    console.log(this.pokemonNameSearch);
+    // Set the current pokemon list to the base list to allow filtering
+    this.currentPokemonList = this.pokemonList;
     // Filter the pokemon based off of the type selection
     if(this.currentType !== "none"){
-      this.currentPokemonList = this.pokemonList.filter((pokemon: any) => {
+      this.currentPokemonList = this.currentPokemonList.filter((pokemon: any) => {
         return this.pokemonByTypeSelection.includes(pokemon.name);
       })
-    } else {
-      this.currentPokemonList = this.pokemonList;
+    }
+    // Filter the pokemon by by name
+    if(this.pokemonNameSearch) {
+      this.currentPokemonList = this.currentPokemonList.filter((pokemon: any) => {
+        return pokemon.name.includes(this.pokemonNameSearch.toLowerCase());
+      })
     }
     console.log("pokemonList", this.pokemonList)
     let maximumValue = 0;
@@ -142,11 +155,22 @@ export class PokemonComponent {
     });
   }
 
+  onNameChange(e: any):void {
+    this.pokemonNameSearch = e.target.value;
+    this.pageIndex = 0;
+    this.pageOffset = 0;
+    this.getPokemonInformation();
+  }
+
   onTypeChange(e: MatSelectChange): void {
     this.currentType = e.value;
     if(e.value !== "none") {
+      this.pageIndex = 0;
+      this.pageOffset = 0;
       this.getPokemonByType(e.value);
     } else {
+      this.pageIndex = 0;
+      this.pageOffset = 0;
       this.getPokemonInformation();
     }
   }

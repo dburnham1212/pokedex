@@ -5,17 +5,24 @@
       <button mat-button class="w-full" (click)="getPokemonByGeneration(i+1)">{{generation.name}}</button>
     </div>
   </mat-drawer>
-  <mat-drawer-content class="p-3">
+  <mat-drawer-content class="p-6">
     <h1 class="text-center">Generation {{generationNumber}}</h1>
-    <mat-form-field>
-        <mat-label>Types</mat-label>
-        <mat-select (selectionChange)="onTypeChange($event)">
-          <mat-option value="none">None</mat-option>
-          @for (type of pokemonTypes; track type) {
-            <mat-option value="{{type.name}}">{{type.name.charAt(0).toUpperCase() + type.name.slice(1)}}</mat-option>
-          }
-        </mat-select>
-    </mat-form-field>
+    <div class="flex gap-3">
+      <mat-form-field>
+        <mat-label>Pokemon Name</mat-label>
+        <input matInput type="text" (input)="onNameChange($event)"/>
+      </mat-form-field>
+    
+      <mat-form-field>
+          <mat-label>Types</mat-label>
+          <mat-select (selectionChange)="onTypeChange($event)">
+            <mat-option value="none">None</mat-option>
+            @for (type of pokemonTypes; track type) {
+              <mat-option value="{{type.name}}">{{type.name.charAt(0).toUpperCase() + type.name.slice(1)}}</mat-option>
+            }
+          </mat-select>
+      </mat-form-field>
+    </div>
 
     <mat-paginator class="mb-3"
       [length]="currentPokemonList.length"
@@ -26,17 +33,24 @@
       [pageSizeOptions]="pageSizeOptions"
     >
     </mat-paginator>
-    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-      <div *ngFor="let pokemonDetails of pokemonDetailedList" >
-        <mat-card 
-          class="p-3 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer"
-          [routerLink]="['/pokemon', pokemonDetails.id]"
-        >
-          <h3 class="text-center border-4">{{pokemonDetails.name.charAt(0).toUpperCase() + pokemonDetails.name.slice(1)}} #{{pokemonDetails.id}}</h3>
-          <img src="{{pokemonDetails.sprites.other['official-artwork'].front_default}}" class="border-4"/>
-        </mat-card>
+    <ng-container *ngIf="currentPokemonList.length > 0; else no_pokemon_found">
+      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        
+          <div *ngFor="let pokemonDetails of pokemonDetailedList" >
+            <mat-card 
+              class="p-3 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer"
+              [routerLink]="['/pokemon', pokemonDetails.id]"
+            >
+              <h3 class="text-center border-4">{{pokemonDetails.name.charAt(0).toUpperCase() + pokemonDetails.name.slice(1)}} #{{pokemonDetails.id}}</h3>
+              <img src="{{pokemonDetails.sprites.other['official-artwork'].front_default}}" class="border-4"/>
+            </mat-card>
+          </div>
+        
       </div>
-    </div>
+    </ng-container>
+    <ng-template #no_pokemon_found>
+      <div class="text-center py-3 text-3xl border-2">No Pokemon Found</div>
+    </ng-template>
   </mat-drawer-content>
 </mat-drawer-container>
 
