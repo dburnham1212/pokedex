@@ -1,6 +1,17 @@
 <div class="bg-white w-3/4 mx-auto border-black border-x-2 p-6 bg-neutral-50">
-  <div class="text-xl text-center border-b-2 w-3/4 mx-auto mb-3">Item Categories</div>
+  
+  
   <div class="w-3/4 mx-auto">
+    <div class="text-3xl text-center border-b-2 mb-3 font-bold pb-3">Item Categories</div>
+    <!-- Sort values -->
+    <mat-form-field>
+      <mat-label>Sort</mat-label>
+      <mat-select value="asc" (selectionChange)="onSortCategories($event)">
+        <mat-option value="asc">Ascending</mat-option>
+        <mat-option value="desc">Descending</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
     <ng-container *ngFor="let category of itemCategories">
       <div 
         class="bg-gray-100 p-1 cursor-pointer hover:bg-gray-300 text-center border-2 my-1"
