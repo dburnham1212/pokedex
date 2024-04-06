@@ -1,18 +1,23 @@
-<mat-drawer-container class="border-x min-h-full">
-  <mat-drawer mode="side" opened class="p-3">
-    <span class="block">Select Generation</span>
-    <div *ngFor="let generation of generations; let i = index" class="pt-3">
-      <button mat-button class="w-full" (click)="getPokemonByGeneration(i+1)">{{generation.name}}</button>
-    </div>
-  </mat-drawer>
-  <mat-drawer-content class="p-6">
-    <div class="text-center text-3xl font-bold border-b-2 mb-3 pb-3">Generation {{generationNumber}}</div>
+
+<div class="w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto min-h-full border-0 sm:border-x-2 border-black bg-neutral-50">
+  <div class="w-full lg:10/12 xl:w-3/4 mx-auto p-6">
+    <div class="text-center text-3xl font-bold border-b-2 mb-3 pb-3">Pokemon</div>
     <div class="flex gap-3">
+      <!-- Generation Dropdown-->
+      <mat-form-field>
+        <mat-label>Pokemon Generation</mat-label>
+        <mat-select value="1" (selectionChange)="onGenerationChange($event)">
+          @for (generation of generations; track generation; let i = $index) {
+            <mat-option value="{{i + 1}}">Generation {{i + 1}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <!-- Pokemon name search-->
       <mat-form-field>
         <mat-label>Pokemon Name</mat-label>
         <input matInput type="text" (input)="onNameChange($event)"/>
       </mat-form-field>
-    
+      <!-- Pokemon type search -->
       <mat-form-field>
           <mat-label>Types</mat-label>
           <mat-select (selectionChange)="onTypeChange($event)">
@@ -21,7 +26,7 @@
               <mat-option value="{{type.name}}">{{type.name.charAt(0).toUpperCase() + type.name.slice(1)}}</mat-option>
             }
           </mat-select>
-      </mat-form-field>
+        </mat-form-field>
     </div>
 
     <mat-paginator class="mb-3"
@@ -51,6 +56,6 @@
     <ng-template #no_pokemon_found>
       <div class="text-center py-3 text-3xl border-2">No Pokemon Found</div>
     </ng-template>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </div>
+</div>
 

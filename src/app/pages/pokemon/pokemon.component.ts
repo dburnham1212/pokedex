@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -17,7 +16,6 @@ import { Observable, concat } from 'rxjs';
   imports: [
     CommonModule,
     RouterModule,
-    MatSidenavModule,
     MatButtonModule,
     MatCardModule,
     MatPaginatorModule,
@@ -88,8 +86,6 @@ export class PokemonComponent {
       this.pokemonList = sortedPokemon;
       this.currentPokemonList = sortedPokemon;
       console.log("sortedPokemon", this.currentPokemonList);
-      this.pageIndex = 0;
-      this.pageOffset = 0;
       this.getPokemonInformation();
     });
   }
@@ -160,6 +156,13 @@ export class PokemonComponent {
     this.pageIndex = 0;
     this.pageOffset = 0;
     this.getPokemonInformation();
+  }
+
+  onGenerationChange(e: MatSelectChange):void {
+    this.generationNumber = Number(e.value);
+    this.pageIndex = 0;
+    this.pageOffset = 0;
+    this.getPokemonByGeneration(this.generationNumber);
   }
 
   onTypeChange(e: MatSelectChange): void {
