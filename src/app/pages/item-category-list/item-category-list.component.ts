@@ -31,7 +31,12 @@ export class ItemCategoryListComponent implements OnInit {
       this.categoryId = routeParams['id'];
       this.pokemonService.getItemsByCategory(this.categoryId).subscribe((result) => {
         console.log(result);
-        this.categoryTitle = result.name;
+        let newCategoryTitleArr = result.name.split("-");
+        for(let i = 0; i < newCategoryTitleArr.length; i++) {
+          newCategoryTitleArr[i] = newCategoryTitleArr[i].charAt(0).toUpperCase() + newCategoryTitleArr[i].slice(1);
+        }
+
+        this.categoryTitle = newCategoryTitleArr.join(" ");
         this.itemList=result.items;
         this.getCategoryItems();
       });
@@ -48,6 +53,11 @@ export class ItemCategoryListComponent implements OnInit {
         }
       });
       
+      let newNameArr = this.itemList[i].name.split("-");
+      for(let j = 0; j < newNameArr.length; j++) {
+        newNameArr[j] = newNameArr[j].charAt(0).toUpperCase() + newNameArr[j].slice(1);
+      }
+      this.itemList[i].name = newNameArr.join(" ")
     }
     console.log(this.itemList);
   }

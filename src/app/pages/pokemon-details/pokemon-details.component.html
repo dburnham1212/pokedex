@@ -1,7 +1,7 @@
-<div class="p-6 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 border-x-2 border-black bg-white mx-auto">
+<div class="p-6 w-full sm:w-11/12 md:w-5/6 lg:w-3/4 border-0 sm:border-x-2 border-black bg-white mx-auto">
   <ng-container *ngIf="pokemonInfo && speciesInfo && typeInfo">
     <div class="text-center border-b-2 text-3xl pb-3 mb-3 lg:10/12 xl:w-3/4 mx-auto font-bold">{{pokemonInfo.name.charAt(0).toUpperCase() + pokemonInfo.name.slice(1)}}</div>
-    <div class="flex flex-col md:flex-row lg:10/12 xl:w-3/4 mx-auto gap-3">
+    <div class="flex flex-col md:flex-row lg:w-10/12 xl:w-3/4 mx-auto gap-3">
       <div class="basis-1/2 flex flex-col gap-3 justify-items-center">
         <img src="{{pokemonInfo.sprites.other['official-artwork'].front_default}}" class="min-h-[250px] min-w-[250px] bg-gray-300 rounded-md"/>
         <div class="border-2 p-3 rounded-md border-black bg-gray-100">
