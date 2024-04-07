@@ -3,7 +3,8 @@ import { PokemonService } from '../../services/pokemon.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { Observable, concat } from 'rxjs';
 
 
 @Component({
@@ -12,7 +13,8 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule
+    MatCardModule,
+    MatPaginatorModule
   ],
   templateUrl: './item-category-list.component.html',
   styleUrl: './item-category-list.component.css'
@@ -23,8 +25,13 @@ export class ItemCategoryListComponent implements OnInit {
   }
 
   categoryId!: string;
-  itemList!: Array<any>;
+  itemList: Array<any> = [];
+  itemListToDisplay!: Array<any>;
   categoryTitle!: string;
+  pageSize = 20;
+  pageIndex = 0;
+  pageOffset = 0;
+  pageSizeOptions = [5, 10, 20];
   
   ngOnInit(): void {    
     this.router.params.subscribe((routeParams) => {
@@ -44,21 +51,41 @@ export class ItemCategoryListComponent implements OnInit {
   }
 
   getCategoryItems(): void {
-    for(let i = 0; i < this.itemList.length; i++) {
-      this.pokemonService.getDetailByUrl(this.itemList[i].url).subscribe((result: any) => {
-        this.itemList[i] = {
-          ...this.itemList[i],
-          image: result.sprites.default,
-          id: result.id
-        }
-      });
-      
-      let newNameArr = this.itemList[i].name.split("-");
+    
+    let maximumValue = 0;
+    if(this.pageOffset + this.pageSize > this.itemList.length) {
+      maximumValue = this.itemList.length;
+    } else {
+      maximumValue = this.pageOffset + this.pageSize;
+    } 
+    
+    const observableList: Array<Observable<any>> = [];
+    for(let i = this.pageOffset; i < maximumValue; i++) {
+      observableList.push(this.pokemonService.getDetailByUrl(this.itemList[i].url));
+    }
+    this.itemListToDisplay=[];
+    concat(
+      ...observableList
+    )
+    .subscribe((result: any) => {
+      // Altering names of items to make them more readable
+      let newNameArr = result.name.split("-");
       for(let j = 0; j < newNameArr.length; j++) {
         newNameArr[j] = newNameArr[j].charAt(0).toUpperCase() + newNameArr[j].slice(1);
       }
-      this.itemList[i].name = newNameArr.join(" ")
-    }
-    console.log(this.itemList);
+      this.itemListToDisplay.push({
+        name: newNameArr.join(" "),
+        image: result.sprites.default,
+        id: result.id
+      })
+    });
+    
+  }
+
+  handlePageEvent(e: PageEvent): void {
+    this.pageSize = e.pageSize
+    this.pageIndex = e.pageIndex
+    this.pageOffset = e.pageIndex * e.pageSize
+    this.getCategoryItems();
   }
 }
