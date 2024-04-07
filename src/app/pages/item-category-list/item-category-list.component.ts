@@ -36,17 +36,21 @@ export class ItemCategoryListComponent implements OnInit {
   ngOnInit(): void {    
     this.router.params.subscribe((routeParams) => {
       this.categoryId = routeParams['id'];
-      this.pokemonService.getItemsByCategory(this.categoryId).subscribe((result) => {
-        console.log(result);
-        let newCategoryTitleArr = result.name.split("-");
-        for(let i = 0; i < newCategoryTitleArr.length; i++) {
-          newCategoryTitleArr[i] = newCategoryTitleArr[i].charAt(0).toUpperCase() + newCategoryTitleArr[i].slice(1);
-        }
-
-        this.categoryTitle = newCategoryTitleArr.join(" ");
-        this.itemList=result.items;
-        this.getCategoryItems();
-      });
+      this.getItemsByCategory(this.categoryId);
+    });
+  }
+  
+  getItemsByCategory(id: string): void {
+    this.pokemonService.getItemsByCategory(id).subscribe((result) => {
+      console.log(result);
+      let newCategoryTitleArr = result.name.split("-");
+      for(let i = 0; i < newCategoryTitleArr.length; i++) {
+        newCategoryTitleArr[i] = newCategoryTitleArr[i].charAt(0).toUpperCase() + newCategoryTitleArr[i].slice(1);
+      }
+  
+      this.categoryTitle = newCategoryTitleArr.join(" ");
+      this.itemList=result.items;
+      this.getCategoryItems();
     });
   }
 
@@ -63,7 +67,9 @@ export class ItemCategoryListComponent implements OnInit {
     for(let i = this.pageOffset; i < maximumValue; i++) {
       observableList.push(this.pokemonService.getDetailByUrl(this.itemList[i].url));
     }
+    // Reset the items to display
     this.itemListToDisplay=[];
+    // Build the list of items to display
     concat(
       ...observableList
     )

@@ -1,7 +1,6 @@
 <div class="bg-white w-full sm:w-11/12 md:w-5/6 lg:w-3/4 mx-auto min-h-full border-0 sm:border-x-2 border-black p-6 bg-neutral-50">
-  <div class="text-center border-b-2 w-3/4 mx-auto pb-3 text-3xl font-bold">{{categoryTitle}}</div>
-  
   <div class="w-full lg:w-10/12 xl:w-3/4 mx-auto ">
+    <div class="text-center border-b-2 mx-auto pb-3 text-3xl font-bold">{{categoryTitle}}</div>
   <mat-paginator class="my-3"
     [length]="itemList.length"
     (page)="handlePageEvent($event)"
