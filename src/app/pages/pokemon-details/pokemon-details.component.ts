@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { DamageRelationDisplayComponent } from './components/damage-relation-display/damage-relation-display.component';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -14,8 +15,9 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule,
     TypeChipComponent,
+    DamageRelationDisplayComponent,
+    MatCardModule,
     MatProgressSpinnerModule,
     MatProgressBarModule
   ],
@@ -24,6 +26,9 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 })
 export class PokemonDetailsComponent implements OnInit, OnDestroy{
   pokemonInfoSubscription!: Subscription;
+  speciesInfoSubscription!: Subscription;
+  evolutionInfoSubscription!: Subscription;
+
   pokemonInfo: any;
   speciesInfo: any;
   typeInfo:any = [];
@@ -34,7 +39,6 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
 
   constructor(private pokemonService: PokemonService, private router: ActivatedRoute ) {
     router.params.subscribe((routeParams) => {
-      //console.log(val)
       this.pokemonId = routeParams['id'];
       this.evolutionStages=[];
       this.typeInfo=[];
@@ -44,7 +48,6 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
         left: 0, 
       });
     })
-    
   }
 
   ngOnInit(): void {
@@ -53,6 +56,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.pokemonInfoSubscription.unsubscribe();
+    this.speciesInfoSubscription.unsubscribe();
+    this.evolutionInfoSubscription.unsubscribe();
   }
 
   getPokemonDetailsById(id: number): void {
@@ -68,9 +73,9 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   }
 
   getSpeciesInfo(url: string): void {
-    this.pokemonService.getDetailByUrl(url).subscribe((result) => {
-      console.log(result);
+    this.speciesInfoSubscription = this.pokemonService.getDetailByUrl(url).subscribe((result) => {
       this.speciesInfo = result;
+      // Find the first entry in english and format it for readability
       let newFlavourText = this.speciesInfo.flavor_text_entries.find((text_entry: any) => {
         return text_entry.language.name === 'en'
       }).flavor_text.split('\f').join(" ");
@@ -82,16 +87,17 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
 
   getTypeInfo(url: string): void {
     this.pokemonService.getDetailByUrl(url).subscribe((result) => {
-      console.log("typeInfo", result);
+      console.log("typeInfo", result)
       this.typeInfo.push(result);
     })
   }
 
   getEvolutionChain(url: string): void {
-    this.pokemonService.getDetailByUrl(url).subscribe(async (result: any) => {
+    this.evolutionInfoSubscription = this.pokemonService.getDetailByUrl(url).subscribe(async (result: any) => {
       console.log("evolution chain", result);
       let evoData: any = result.chain;
       let stage = 0;
+      // Loop through to get the evolution data for the chosen pokemon
       do {
         let numberOfEvolutions = evoData['evolves_to'].length;  
         if(evoData.species) {
@@ -127,6 +133,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   }
 
   getLearnedMoves() {
+    // Get the learned move info from the db
     this.learnedMoves = this.pokemonInfo.moves.map((move: any) => {
       return {
         moveName: move.move.name,
@@ -136,6 +143,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
       }
     }).filter((move: any) => {return move.learnedMoveInfo });
 
+    // Alter the move list so it is in a more readale format
     for(let move of this.learnedMoves) {
       let newMoveName = move.moveName.split("-");
       for(let i = 0; i < newMoveName.length; i++) {
@@ -144,6 +152,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
       move.moveName = newMoveName.join(" ")
     }
 
+    // Sort the learned moves based off of the level learned
     this.learnedMoves.sort((a: any, b: any) => {
       if(a.learnedMoveInfo.level_learned_at > b.learnedMoveInfo.level_learned_at) {
         return 1;

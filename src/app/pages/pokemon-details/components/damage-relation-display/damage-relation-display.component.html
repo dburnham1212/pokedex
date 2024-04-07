@@ -1,0 +1,13 @@
+<div>
+  <p class="pt-2">{{title}}:</p>
+  <div class="flex flex-wrap gap-2 pb-2" [ngClass]="{'border-b-2': underlined=== true}">
+    <ng-container *ngIf="relationArray.length > 0; else no_damage_relation">
+      <ng-container *ngFor="let type of relationArray">
+        <app-type-chip type={{type.name}}></app-type-chip>
+      </ng-container>
+    </ng-container>
+    <ng-template #no_damage_relation>
+      <div>None</div>
+    </ng-template>
+  </div>
+</div>

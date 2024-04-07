@@ -41,6 +41,7 @@
           </div>
         </div>
       </div>
+      <!-- Pokemon Info -->
       <div class="basis-1/2 flex flex-col justify-start gap-3">
         <div class="p-6 min-w-[250px] min-h-[250px] border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Info</h3>
@@ -83,88 +84,48 @@
                 <div class="flex justify-center pb-2 border-b-2" >
                   <app-type-chip  type={{pokemonType.name}}></app-type-chip>
                 </div>
-                <div>
-                  <p class="pt-2">Double Damage To:</p>
-                  <div class="border-b-2 flex flex-wrap gap-2 pb-2">
-                    <ng-container *ngIf="pokemonType.damage_relations.double_damage_to.length > 0; else no_double_damage_to">
-                      <ng-container *ngFor="let type of pokemonType.damage_relations.double_damage_to">
-                        <app-type-chip type={{type.name}}></app-type-chip>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #no_double_damage_to>
-                      <div>None</div>
-                    </ng-template>
-                  </div>
-                </div>
-                <div>
-                  <p class="pt-2">Double Damage From:</p>
-                  <div class="border-b-2 flex flex-wrap gap-2 pb-2">
-                    <ng-container *ngIf="pokemonType.damage_relations.double_damage_from.length > 0; else no_double_damage_from">
-                      <ng-container *ngFor="let type of pokemonType.damage_relations.double_damage_from">
-                        <app-type-chip type={{type.name}}></app-type-chip>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #no_double_damage_from>
-                      <div>None</div>
-                    </ng-template>
-                  </div>
-                </div>
-                <div>
-                  <p class="pt-2">Half Damage From:</p>
-                  <div class="border-b-2 flex flex-wrap gap-2 pb-2">
-                    <ng-container *ngIf="pokemonType.damage_relations.half_damage_from.length > 0; else no_half_damage_from">
-                      <ng-container *ngFor="let type of pokemonType.damage_relations.half_damage_from">
-                        <app-type-chip type={{type.name}}></app-type-chip>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #no_half_damage_from>
-                      <div>None</div>
-                    </ng-template>
-                  </div>
-                </div>
-                <div>
-                  <p class="pt-2">Half Damage To:</p>
-                  <div class="border-b-2 flex flex-wrap gap-2 pb-2">
-                    <ng-container *ngIf="pokemonType.damage_relations.half_damage_to.length > 0; else no_half_damage_to">
-                      <ng-container *ngFor="let type of pokemonType.damage_relations.half_damage_to">
-                        <app-type-chip type={{type.name}}></app-type-chip>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #no_half_damage_to>
-                      <div>None</div>
-                    </ng-template>
-                  </div>
-                </div>
-                <div>
-                  <p class="pt-2">No Damage To:</p>
-                  <div class="border-b-2 flex flex-wrap gap-2 pb-2">
-                    <ng-container *ngIf="pokemonType.damage_relations.no_damage_to.length > 0; else no_damage_to">
-                      <ng-container *ngFor="let type of pokemonType.damage_relations.no_damage_to">
-                        <app-type-chip type={{type.name}}></app-type-chip>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #no_damage_to>
-                      <div>None</div>
-                    </ng-template>
-                  </div>
-                </div>
-                <div>
-                  <p class="pt-2">No Damage To:</p>
-                  <div class="flex flex-wrap gap-2 pb-2">
-                    <ng-container *ngIf="pokemonType.damage_relations.no_damage_from.length > 0; else no_damage_from">
-                      <ng-container *ngFor="let type of pokemonType.damage_relations.no_damage_from">
-                        <app-type-chip type={{type.name}}></app-type-chip>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #no_damage_from>
-                      <div>None</div>
-                    </ng-template>
-                  </div>
-                </div>
+                <app-damage-relation-display 
+                  [title]="'Double Damage To'"
+                  [relationArray]="pokemonType.damage_relations.double_damage_to"
+                  [underlined]="true"
+                  >
+                </app-damage-relation-display>
+                <app-damage-relation-display 
+                  [title]="'Double Damage From'"
+                  [relationArray]="pokemonType.damage_relations.double_damage_from"
+                  [underlined]="true"
+                  >
+                </app-damage-relation-display>
+                
+                <app-damage-relation-display 
+                  [title]="'Half Damage To'"
+                  [relationArray]="pokemonType.damage_relations.half_damage_to"
+                  [underlined]="true"
+                  >
+                </app-damage-relation-display>
+                <app-damage-relation-display 
+                  [title]="'Half Damage From'"
+                  [relationArray]="pokemonType.damage_relations.half_damage_from"
+                  [underlined]="true"
+                  >
+                </app-damage-relation-display>
+                <app-damage-relation-display 
+                  [title]="'No Damage To'"
+                  [relationArray]="pokemonType.damage_relations.no_damage_to"
+                  [underlined]="true"
+                  >
+                </app-damage-relation-display>
+                <app-damage-relation-display 
+                  [title]="'No Damage From'"
+                  [relationArray]="pokemonType.damage_relations.no_damage_from"
+                  [underlined]="false"
+                  >
+                </app-damage-relation-display>
               </div>
             </ng-container>
           </div>
         </div>
+        <!-- Evolution stages -->
         <div class="border-2 border-black bg-gray-100 p-6">
           <h3 class="text-center">Evolutions</h3>
           <ng-container *ngFor="let stage of evolutionStages; let stageIndex = index">
