@@ -29,6 +29,12 @@ export class ItemDetailsComponent implements OnInit{
     this.pokemonService.getItemDetails(id).subscribe((result) => {
       console.log(result);
       this.itemInfo = result;
+      // Altering title to be a more readable format
+      let itemNameArr = this.itemInfo.name.split("-");
+      for(let i = 0; i < itemNameArr.length; i++){
+        itemNameArr[i] = itemNameArr[i].charAt(0).toUpperCase() + itemNameArr[i].slice(1);
+      }      
+      this.itemInfo.name = itemNameArr.join(" ")
       this.getFlavourText();
       this.getItemAttributes();
     })
@@ -46,8 +52,13 @@ export class ItemDetailsComponent implements OnInit{
     let newItemAttributes: any = [];
     for(let attribute of this.itemInfo.attributes) {
       this.pokemonService.getDetailByUrl(attribute.url).subscribe((result: any) => {
+        // Altering attribute name to be a more readable format
+        let newNameArr = result.name.split("-")
+        for(let i = 0; i < newNameArr.length; i++) {
+          newNameArr[i] = newNameArr[i].charAt(0).toUpperCase() + newNameArr[i].slice(1);
+        }
         newItemAttributes.push({
-          name: result.name,
+          name: newNameArr.join(" "),
           description: result.descriptions.find((description: any) => {
             return description.language.name === 'en'
           }).description
