@@ -6,6 +6,11 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-item-categories',
   standalone: true,
@@ -18,12 +23,13 @@ import { Subscription } from 'rxjs';
   templateUrl: './item-categories.component.html',
   styleUrl: './item-categories.component.css'
 })
+
 export class ItemCategoriesComponent implements OnInit, OnDestroy{
   constructor (private pokemonService: PokemonService) {}
 
   itemCategoriesSubscription!: Subscription;
 
-  itemCategories: any;
+  itemCategories!: Array<Category>;
 
   ngOnInit(): void {
     this.getItemCategories();
