@@ -64,7 +64,9 @@ export class PokemonComponent implements OnInit, OnDestroy {
     this.pokemonDetailSubscription.unsubscribe();
     this.pokemonByGenerationSubscription.unsubscribe();
     this.pokemonTypeSubscription.unsubscribe();
-    this.pokemonTypeInfoSubscription.unsubscribe();
+    if(this.pokemonTypeInfoSubscription) {
+      this.pokemonTypeInfoSubscription.unsubscribe();
+    }
   }
 
   getPokemonByGeneration(newGenerationNumber: number): void {

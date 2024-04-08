@@ -28,6 +28,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   pokemonInfoSubscription!: Subscription;
   speciesInfoSubscription!: Subscription;
   evolutionInfoSubscription!: Subscription;
+  typeInfoSubscription!: Subscription;
 
   pokemonInfo: any;
   speciesInfo: any;
@@ -58,12 +59,12 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
     this.pokemonInfoSubscription.unsubscribe();
     this.speciesInfoSubscription.unsubscribe();
     this.evolutionInfoSubscription.unsubscribe();
+    this.typeInfoSubscription.unsubscribe();
   }
 
   getPokemonDetailsById(id: number): void {
     this.pokemonInfoSubscription = this.pokemonService.getPokemonInfoById(id).subscribe((result) => {
       this.pokemonInfo = result;
-      console.log(result);
       this.getSpeciesInfo(this.pokemonInfo.species.url);
       this.getLearnedMoves();
       this.pokemonInfo.types.forEach((type: any) => {
@@ -86,15 +87,13 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
   }
 
   getTypeInfo(url: string): void {
-    this.pokemonService.getDetailByUrl(url).subscribe((result) => {
-      console.log("typeInfo", result)
+    this.typeInfoSubscription = this.pokemonService.getDetailByUrl(url).subscribe((result) => {
       this.typeInfo.push(result);
     })
   }
 
   getEvolutionChain(url: string): void {
     this.evolutionInfoSubscription = this.pokemonService.getDetailByUrl(url).subscribe(async (result: any) => {
-      console.log("evolution chain", result);
       let evoData: any = result.chain;
       let stage = 0;
       // Loop through to get the evolution data for the chosen pokemon
@@ -128,7 +127,6 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy{
         evoData = evoData['evolves_to'][0];
       
       } while (!!evoData && evoData.hasOwnProperty('evolves_to'));
-      console.log(this.evolutionStages)
     })
   }
 
