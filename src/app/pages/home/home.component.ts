@@ -15,6 +15,9 @@ export class HomeComponent implements OnInit{
   bulbasaurImage: any;
   charmanderImage: any;
 
+  pikachuPokemonImage: any;
+  pokeballItemImage: any;
+
   constructor(private pokemonService: PokemonService) {}
 
   ngOnInit(): void {
@@ -25,6 +28,7 @@ export class HomeComponent implements OnInit{
     this.pokemonService.getPokemonInfoByName("pikachu").subscribe((result: any) => {
       console.log(result);
       this.pikachuImage = result.sprites.versions['generation-v']['black-white'].animated.front_default;
+      this.pikachuPokemonImage = result.sprites.other['official-artwork'].front_default;
     })
     
     this.pokemonService.getPokemonInfoByName("squirtle").subscribe((result: any) => {
@@ -40,6 +44,11 @@ export class HomeComponent implements OnInit{
     this.pokemonService.getPokemonInfoByName("charmander").subscribe((result: any) => {
       console.log(result);
       this.charmanderImage=result.sprites.versions['generation-v']['black-white'].animated.front_default;
+    })
+
+    this.pokemonService.getItemDetails("4").subscribe((result) => {
+      console.log(result)
+      this.pokeballItemImage = result.sprites.default;
     })
   }
 }
