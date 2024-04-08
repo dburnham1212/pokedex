@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-item-categories',
@@ -17,8 +18,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   templateUrl: './item-categories.component.html',
   styleUrl: './item-categories.component.css'
 })
-export class ItemCategoriesComponent implements OnInit{
+export class ItemCategoriesComponent implements OnInit, OnDestroy{
   constructor (private pokemonService: PokemonService) {}
+
+  itemCategoriesSubscription!: Subscription;
 
   itemCategories: any;
 
@@ -26,10 +29,16 @@ export class ItemCategoriesComponent implements OnInit{
     this.getItemCategories();
   }
 
+  ngOnDestroy(): void {
+    this.itemCategoriesSubscription.unsubscribe();
+  }
+
+  // Set up Item Categories
   getItemCategories() {
-    this.pokemonService.getItemCategories().subscribe((result) => {
+    this.itemCategoriesSubscription = this.pokemonService.getItemCategories().subscribe((result) => {
       let formattedCategoryResults = [];
       for(let category of result.results) {
+        // Get the category id from the url
         let categoryUrlArr = category.url.split("/");
         let categoryId = categoryUrlArr[categoryUrlArr.length - 2];
 
@@ -40,12 +49,14 @@ export class ItemCategoriesComponent implements OnInit{
         }
         let categoryName = categoryNameArr.join(" ");
 
+        // Format the category list based off of found values
         formattedCategoryResults.push({
           name: categoryName,
           id: categoryId
         })
       }
       this.itemCategories = formattedCategoryResults;
+      // Sort categories in ascending order to start
       this.sortCategoriesAsc();
     })
   }
