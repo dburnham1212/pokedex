@@ -26,6 +26,29 @@ A page that shows a collection of different pokemon information. This includes i
 
 !["Screenshot 3 of Pokemon Page!"](https://github.com/dburnham1212/pokedex/blob/master/src/assets/Screenshots/Desktop/Pokemon-Details-3.png)
 
+### Pokedex - Item Categories Page
+
+A page that lists all the categories for items. This list can be sorted in ascending and descending order. When an item category is clicked a new page will open with all of the items listed for that specific category.
+
+!["Screenshot of Item Categories Page!"](https://github.com/dburnham1212/pokedex/blob/master/src/assets/Screenshots/Desktop/Item-Categories.png)
+
+### Pokedex - Item List Page
+
+A page that lists all of the items for a specific item category. When an item card is clicked a new page will open displaying all information for said item.
+
+!["Screenshot of Item Categories Page!"](https://github.com/dburnham1212/pokedex/blob/master/src/assets/Screenshots/Desktop/Item-List.png)
+
+### Pokedex - Item Categories Page
+
+A page that displays all of the details for a specific item. This includes an image of the item, general information, effects and attributes.
+
+!["Screenshot of Item Categories Page!"](https://github.com/dburnham1212/pokedex/blob/master/src/assets/Screenshots/Desktop/Item-Details.png)
+
+### Pokedex - Mobile Screenshots
+
+A collection of screenshots for each of the pages on mobile view.
+
+!["Mobile Screenshots!"](https://github.com/dburnham1212/pokedex/blob/master/src/assets/Screenshots/Mobile/mobile-layout.png)
 
 # Running The Application
 
