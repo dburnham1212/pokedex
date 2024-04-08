@@ -28,8 +28,11 @@ import { Observable, Subscription, concat } from 'rxjs';
 })
 
 export class PokemonComponent implements OnInit, OnDestroy {
-  pokemonGenerationSubscription!: Subscription;
+  pokemonByGenerationSubscription!: Subscription;
   pokemonDetailSubscription!: Subscription;
+  pokemonGenerationSubscription!: Subscription;
+  pokemonTypeSubscription!: Subscription;
+  pokemonTypeInfoSubscription!: Subscription;
 
   generationNumber = 1;
   generations!: any;
@@ -57,12 +60,15 @@ export class PokemonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.pokemonGenerationSubscription.unsubscribe();
+    this.pokemonByGenerationSubscription.unsubscribe();
     this.pokemonDetailSubscription.unsubscribe();
+    this.pokemonByGenerationSubscription.unsubscribe();
+    this.pokemonTypeSubscription.unsubscribe();
+    this.pokemonTypeInfoSubscription.unsubscribe();
   }
 
   getPokemonByGeneration(newGenerationNumber: number): void {
-    this.pokemonGenerationSubscription = this.pokemonService.getPokemonByGeneration(newGenerationNumber).subscribe((result) => {
+    this.pokemonByGenerationSubscription = this.pokemonService.getPokemonByGeneration(newGenerationNumber).subscribe((result) => {
       // Create a number to sort the pokemon by
       let listWithNumber = result.pokemon_species.map((item: any) => {
         const pokemonUrlArr = item.url.split("/");
@@ -128,20 +134,22 @@ export class PokemonComponent implements OnInit, OnDestroy {
   }
 
   getPokemonGenerations(): void {
-    this.pokemonService.getPokemonGenerations().subscribe((result) => {
+    // Get pokemon generations
+    this.pokemonByGenerationSubscription = this.pokemonService.getPokemonGenerations().subscribe((result) => {
       this.generations=result.results;
     })
   }
 
   getPokemonTypes(): void {
-    this.pokemonService.getPokemonTypes().subscribe((result) => {
+    // Get pokemon types
+    this.pokemonTypeSubscription = this.pokemonService.getPokemonTypes().subscribe((result) => {
       this.pokemonTypes=result.results;
-      console.log(this.pokemonTypes)
     })
   }
 
   getPokemonByType(type: string): void {
-    this.pokemonService.getTypeInfo(type).subscribe((result) => {
+    // Get the pokemon names based off of the specific type
+    this.pokemonTypeInfoSubscription = this.pokemonService.getTypeInfo(type).subscribe((result) => {
       this.pokemonByTypeSelection = result.pokemon.map((pokemon: any) => {
         return pokemon.pokemon.name;
       })
@@ -150,38 +158,52 @@ export class PokemonComponent implements OnInit, OnDestroy {
   } 
   
   handlePageEvent(e: PageEvent): void {
+    // Set page values based off of current page 
     this.pageSize = e.pageSize
     this.pageIndex = e.pageIndex
     this.pageOffset = e.pageIndex * e.pageSize
+    // Clear old pokemon list
     this.pokemonDetailSubscription.unsubscribe();
+    // Get new Pokemon List
     this.getPokemonInformation();
   }
 
   onNameChange(e: any):void {
+    // Set the name search values based off of input
     this.pokemonNameSearch = e.target.value;
+    // Reset page to be first
     this.pageIndex = 0;
     this.pageOffset = 0;
+    // Clear old pokemon list
     this.pokemonDetailSubscription.unsubscribe();
+    // Get new pokemon list
     this.getPokemonInformation();
   }
 
   onGenerationChange(e: MatSelectChange):void {
+    // Set generation number based off of input
     this.generationNumber = Number(e.value);
+    // Reset page to be first
     this.pageIndex = 0;
     this.pageOffset = 0;
+    // Clear old pokemon list
+    this.pokemonDetailSubscription.unsubscribe();
+    // Get new pokemon list
     this.getPokemonByGeneration(this.generationNumber);
   }
 
   onTypeChange(e: MatSelectChange): void {
+    // Set type based off of input
     this.currentType = e.value;
+    // Reset page to be first
+    this.pageIndex = 0;
+    this.pageOffset = 0;
+    // Clear old pokemon list
+    this.pokemonDetailSubscription.unsubscribe();
+    // Get new pokemon list based off of input
     if(e.value !== "none") {
-      this.pageIndex = 0;
-      this.pageOffset = 0;
       this.getPokemonByType(e.value);
     } else {
-      this.pageIndex = 0;
-      this.pageOffset = 0;
-      this.pokemonDetailSubscription.unsubscribe();
       this.getPokemonInformation();
     }
   }
