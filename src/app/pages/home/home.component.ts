@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonService } from '../../services/pokemon.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -9,14 +10,20 @@ import { PokemonService } from '../../services/pokemon.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
-  pikachuImage: any;
-  squirtleImage: any;
-  bulbasaurImage: any;
-  charmanderImage: any;
+export class HomeComponent implements OnInit, OnDestroy{
+  pikachuImageSubscription!: Subscription;
+  squirtleImageSubscription!: Subscription;
+  bulbasaurImageSubscription!: Subscription;
+  charmanderImageSubscription!: Subscription;
+  pokeballImageSubscription!: Subscription;
 
-  pikachuPokemonImage: any;
-  pokeballItemImage: any;
+  pikachuImage!: string;
+  squirtleImage!: string;
+  bulbasaurImage!: string;
+  charmanderImage!: string;
+
+  pikachuPokemonImage!: string;
+  pokeballItemImage!: string;
 
   constructor(private pokemonService: PokemonService) {}
 
@@ -24,29 +31,37 @@ export class HomeComponent implements OnInit{
     this.getPokemonImages();
   }
 
+  ngOnDestroy(): void {
+    this.pikachuImageSubscription.unsubscribe();
+    this.squirtleImageSubscription.unsubscribe();
+    this.bulbasaurImageSubscription.unsubscribe();
+    this.charmanderImageSubscription.unsubscribe();
+    this.pokeballImageSubscription.unsubscribe();
+  }
+
   getPokemonImages(): any {
-    this.pokemonService.getPokemonInfoByName("pikachu").subscribe((result: any) => {
+    this.pikachuImageSubscription = this.pokemonService.getPokemonInfoByName("pikachu").subscribe((result: any) => {
       console.log(result);
       this.pikachuImage = result.sprites.versions['generation-v']['black-white'].animated.front_default;
       this.pikachuPokemonImage = result.sprites.other['official-artwork'].front_default;
     })
     
-    this.pokemonService.getPokemonInfoByName("squirtle").subscribe((result: any) => {
+    this.squirtleImageSubscription = this.pokemonService.getPokemonInfoByName("squirtle").subscribe((result: any) => {
       console.log(result);
       this.squirtleImage=result.sprites.versions['generation-v']['black-white'].animated.front_default;
     })
 
-    this.pokemonService.getPokemonInfoByName("bulbasaur").subscribe((result: any) => {
+    this.bulbasaurImageSubscription = this.pokemonService.getPokemonInfoByName("bulbasaur").subscribe((result: any) => {
       console.log(result);
       this.bulbasaurImage=result.sprites.versions['generation-v']['black-white'].animated.front_default;
     })
 
-    this.pokemonService.getPokemonInfoByName("charmander").subscribe((result: any) => {
+    this.charmanderImageSubscription = this.pokemonService.getPokemonInfoByName("charmander").subscribe((result: any) => {
       console.log(result);
       this.charmanderImage=result.sprites.versions['generation-v']['black-white'].animated.front_default;
     })
 
-    this.pokemonService.getItemDetails("4").subscribe((result) => {
+    this.pokeballImageSubscription = this.pokemonService.getItemDetails("4").subscribe((result) => {
       console.log(result)
       this.pokeballItemImage = result.sprites.default;
     })
