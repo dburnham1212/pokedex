@@ -25,11 +25,11 @@ interface Category {
 })
 
 export class ItemCategoriesComponent implements OnInit, OnDestroy{
-  constructor (private pokemonService: PokemonService) {}
-
   itemCategoriesSubscription!: Subscription;
-
+  
   itemCategories!: Array<Category>;
+  
+  constructor (private pokemonService: PokemonService) { }
 
   ngOnInit(): void {
     this.getItemCategories();

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, concat } from 'rxjs';
+import { Observable, Subscription, concat } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
@@ -26,9 +26,13 @@ import { Observable, concat } from 'rxjs';
   templateUrl: './pokemon.component.html',
   styleUrl: './pokemon.component.css'
 })
-export class PokemonComponent {
+
+export class PokemonComponent implements OnInit, OnDestroy {
+  pokemonGenerationSubscription!: Subscription;
+  pokemonDetailSubscription!: Subscription;
+
   generationNumber = 1;
-  generations: any | undefined;
+  generations!: any;
   pokemonList = [];
   currentPokemonList = [];
   pokemonDetailedList: Array<any> = [];
@@ -52,17 +56,13 @@ export class PokemonComponent {
     this.getPokemonTypes();
   }
 
-  handlePageEvent(e: PageEvent): void {
-    this.pageSize = e.pageSize
-    this.pageIndex = e.pageIndex
-    this.pageOffset = e.pageIndex * e.pageSize
-    this.getPokemonInformation();
-
+  ngOnDestroy(): void {
+    this.pokemonGenerationSubscription.unsubscribe();
+    this.pokemonDetailSubscription.unsubscribe();
   }
 
   getPokemonByGeneration(newGenerationNumber: number): void {
-    this.pokemonService.getPokemonByGeneration(newGenerationNumber).subscribe((result) => {
-      console.log("pokemonGenResult", result);
+    this.pokemonGenerationSubscription = this.pokemonService.getPokemonByGeneration(newGenerationNumber).subscribe((result) => {
       // Create a number to sort the pokemon by
       let listWithNumber = result.pokemon_species.map((item: any) => {
         const pokemonUrlArr = item.url.split("/");
@@ -82,17 +82,15 @@ export class PokemonComponent {
         }
         return 0;
       })
+      // set up appropriate lists based off of returned values
       this.generationNumber = newGenerationNumber;
       this.pokemonList = sortedPokemon;
       this.currentPokemonList = sortedPokemon;
-      console.log("sortedPokemon", this.currentPokemonList);
       this.getPokemonInformation();
     });
   }
 
   getPokemonInformation (): void {
-    
-    console.log(this.pokemonNameSearch);
     // Set the current pokemon list to the base list to allow filtering
     this.currentPokemonList = this.pokemonList;
     // Filter the pokemon based off of the type selection
@@ -107,21 +105,22 @@ export class PokemonComponent {
         return pokemon.name.includes(this.pokemonNameSearch.toLowerCase());
       })
     }
-    console.log("pokemonList", this.pokemonList)
+    // Set up the maximum value, if the max value is less than current offset + page size use it, otherwise use current offset + page size
     let maximumValue = 0;
     if(this.pageOffset + this.pageSize > this.currentPokemonList.length) {
       maximumValue = this.currentPokemonList.length;
     } else {
       maximumValue = this.pageOffset + this.pageSize;
     } 
-    
+    // Set up list of observables to get pokemon info
     const observableList: Array<Observable<any>> = [];
     for(let i = this.pageOffset; i < maximumValue; i++) {
       
       observableList.push(this.pokemonService.getPokemonInfoByName(this.currentPokemonList[i]['name']));
     }
+    // Set up the new list of pokemon
     let newPokemonDetailList: any = []
-    concat(...observableList).
+    this.pokemonDetailSubscription = concat(...observableList).
     subscribe((result) => {
       newPokemonDetailList.push(result)
     })
@@ -146,15 +145,23 @@ export class PokemonComponent {
       this.pokemonByTypeSelection = result.pokemon.map((pokemon: any) => {
         return pokemon.pokemon.name;
       })
-      console.log(this.pokemonByTypeSelection);
       this.getPokemonInformation();
     });
+  } 
+  
+  handlePageEvent(e: PageEvent): void {
+    this.pageSize = e.pageSize
+    this.pageIndex = e.pageIndex
+    this.pageOffset = e.pageIndex * e.pageSize
+    this.pokemonDetailSubscription.unsubscribe();
+    this.getPokemonInformation();
   }
 
   onNameChange(e: any):void {
     this.pokemonNameSearch = e.target.value;
     this.pageIndex = 0;
     this.pageOffset = 0;
+    this.pokemonDetailSubscription.unsubscribe();
     this.getPokemonInformation();
   }
 
@@ -174,6 +181,7 @@ export class PokemonComponent {
     } else {
       this.pageIndex = 0;
       this.pageOffset = 0;
+      this.pokemonDetailSubscription.unsubscribe();
       this.getPokemonInformation();
     }
   }

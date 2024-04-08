@@ -6,6 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Observable, Subscription, concat } from 'rxjs';
 
+interface Item {
+  name: string;
+  image: string;
+  id: number;
+}
 
 @Component({
   selector: 'app-item-category-list',
@@ -25,16 +30,14 @@ export class ItemCategoryListComponent implements OnInit, OnDestroy {
   
   categoryId!: string;
   itemList: Array<any> = [];
-  itemListToDisplay!: Array<any>;
+  itemListToDisplay!: Array<Item>;
   categoryTitle!: string;
   pageSize = 20;
   pageIndex = 0;
   pageOffset = 0;
   pageSizeOptions = [5, 10, 20];
 
-  constructor (private pokemonService: PokemonService, private router: ActivatedRoute) {
-
-  }
+  constructor (private pokemonService: PokemonService, private router: ActivatedRoute) { }
   
   ngOnInit(): void {    
     this.router.params.subscribe((routeParams) => {

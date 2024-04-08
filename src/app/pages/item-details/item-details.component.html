@@ -6,6 +6,7 @@
         <img src="{{itemInfo.sprites.default || 'assets/images/pokeball.png'}}" class="w-full pixelated-image bg-gray-300 rounded-md">
       </div>
       <div class="basis-1/2 flex flex-col gap-3">
+        <!-- Item info -->
         <div class="p-6 min-w-[250px] min-h-[250px] border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Info</h3>
           <p>{{flavourText}}</p>
@@ -26,6 +27,7 @@
             <span class="text-sm">{{(itemInfo.category.name) || 'None'}}</span>
           </div>
         </div>
+        <!-- Item Effects-->
         <div class="p-6 min-w-[250px] border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Effects</h3>
           <ng-container *ngIf="itemInfo.effect_entries.length > 0; else no_effect_entries">
@@ -37,6 +39,7 @@
             <p>None</p>
           </ng-template>
         </div>
+        <!-- Item Attributes -->
         <div class="p-6 min-w-[250px] border-2 border-black rounded-md bg-gray-100">
           <h3 class="text-center">Attributes</h3>
           <ng-container *ngIf="itemAttributes.length > 0; else no_attributes_entries">

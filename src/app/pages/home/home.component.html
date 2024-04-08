@@ -13,13 +13,13 @@
       Some images are rendered in low resolution in this dataset and some information may be incomplete.
     </div>
     <div class="flex flex-col sm:flex-row w-full gap-3">
-      <mat-card class="basis-1/2 p-6 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer">
+      <mat-card routerLink="/pokemon" class="basis-1/2 p-6 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer">
         <div class="border-2 mb-3 text-center text-xl py-1">Pokemon</div>
         <div class="p-3 border-2">
           <img src="{{pikachuPokemonImage}}"/>
         </div>
       </mat-card>
-      <mat-card class="basis-1/2 p-6 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer">
+      <mat-card routerLink="/items" class="basis-1/2 p-6 transition ease-in-out hover:translate-y-1 hover:bg-gray-300 cursor-pointer">
         <div class="border-2 mb-3 text-center text-xl py-1">Items</div>
         <div class="p-3 border-2">
           <img class="w-full pixelated-image" src="{{pokeballItemImage}}"/>

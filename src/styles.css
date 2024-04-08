@@ -9,6 +9,7 @@ body {
   background-image: url(./assets/images/pokeball_bg_25.png);
   background-repeat: repeat;
   background-size: 100px 100px;
+  padding-top: 60px;
 }
 
 .pixelated-image {

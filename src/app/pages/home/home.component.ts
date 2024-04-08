@@ -2,11 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonService } from '../../services/pokemon.service';
 import { Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [
+    RouterModule,
+    MatCardModule
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -25,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   pikachuPokemonImage!: string;
   pokeballItemImage!: string;
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(private pokemonService: PokemonService) { }
 
   ngOnInit(): void {
     this.getPokemonImages();
